@@ -36,7 +36,6 @@ public class TestAnimal {
 // ==================================================================================================================== //
 // =============================================== Classe Animal
 public class Animal {
-
     private boolean vivant = true;
     private int age;
     static int nombreAnimauxVivants;
@@ -93,8 +92,6 @@ public class Animal {
 
 // ==================================================================================================================== //
 // =============================================== Classe Vache
-package animal;
-
 public class Vache extends Animal {
     private static int ageMaximum = 5;
 

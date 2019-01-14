@@ -1,0 +1,182 @@
+// ================================================================================================================= //
+// ==================================         Auteur du TP Michel GINESTE         ================================== //
+// ================================================================================================================= //
+
+package tableauvoitures;
+import utilitairesMG.divers.Clavier;
+
+public class TableauVoitures {
+
+    public static void main(String[] args) {
+        int nbVoiture, numM, i, j;
+        String nomV;
+        Garage g1, g2;
+        Vendeur tabVendeur[];
+        Voiture tabVoiture[];
+        
+        g1 = new Garage("Avenue des champes Elysee 75008 PARIS");
+        g2 = new Garage();
+        
+// ===== TABLEAU DE VENDEURS =====
+        tabVendeur = new Vendeur[3];
+        tabVendeur[0] = new Vendeur("Oie", "BERNACHE", g1);
+        tabVendeur[1] = new Vendeur("Aigle","ROYAL", g2);
+        tabVendeur[2] = new Vendeur("Balbuzard", "PECHEUR", g1);
+        
+// ===== TABLEAU DE VOITURES EN CONVERSATIONNEL =====        
+        System.out.println("Entrez le nombre de voiture a creer : ");
+        nbVoiture = Clavier.readInt();                                          // Saisie du nombre de lignes
+        tabVoiture = new Voiture[nbVoiture];                                    // Creation d'un nouvel objet tableau Voiture
+        for (i = 0; i < tabVoiture.length; i++) {                               // Premiere boucle: parcourir la table de voitures crées
+            System.out.println("\nVoiture numero " + (i+1) + " :");
+            System.out.println("Numero de moteur (ou 0) :");
+            numM = Clavier.readInt();
+            System.out.println("Nom du vendeur : ");
+            nomV = Clavier.readString();
+            
+            j = 0;
+            while ((j < tabVendeur.length) && (tabVendeur[j].getVendeurNom().
+                    compareToIgnoreCase(nomV) != 0)) {
+                j++;
+            }
+            if (j >= tabVendeur.length) {
+                if (numM == 0) {
+                    tabVoiture[i] = 
+                        new Voiture();
+                } else {
+                    tabVoiture[i] = 
+                        new Voiture(numM);
+                }
+            } else {                                                            // Incrementation de l'objet vendeur
+                if (numM == 0) {
+                    tabVoiture[i] = 
+                        new Voiture(tabVendeur[j]);
+                } else {
+                    tabVoiture[i] = 
+                        new Voiture(numM, tabVendeur[j]);
+                }
+            }  
+        }
+// ===== AFFICHAGE RESULTAT =====        
+        for (i = 0; i < nbVoiture; i++) {
+        System.out.print(tabVoiture[i] + "\n");
+        }
+    }
+}
+// ================================================================================================================= //
+// ============================ Class Garage
+public class Garage {
+    private static String nomMarque = "VOLIERE SA";                             // PROPRIETE / VARIABLE DE CLASSE
+    
+    private String adresse;                                                     // PROPRIETE / VARIABLE D'INSTANCE
+
+// ===== CONSTRUCTEURS ===== 
+    public Garage() {
+        this.adresse = "Rue Paradis 13001 MARSELLE";
+    }
+            
+    public Garage(String adresse) {                                             // Garage(String adresse) = Methode "Garage"
+        this.adresse = adresse;                                                 // possedant une variable LOCALE "adresse"
+    }                                                                           // de valeur "String"
+// ===== METHODES GETTER / SETTER ======    
+    public static String getNomMarque() {
+        return nomMarque;
+    }
+// ===== REDEFINITION DE LA METHODE toString =====    
+    @Override
+    public String toString() {
+        return  nomMarque + " - " + adresse;
+    }
+}
+
+// ================================================================================================================= //
+// ============================ Class Voiture
+public class Voiture {
+    private int numVoiture;                                                     // PROPRIETE / VARIABLE D'INSTANCE
+    private Moteur moteur;                                                      // PROPRIETE / VARIABLE D'INSTANCE
+    private Vendeur vendeur;                                                    // PROPRIETE / VARIABLE D'INSTANCE
+    
+    private static int compteur;                                                // STATIC = PROPRIETE / VARIABLE DE CLASSE
+    
+// ===== CONSTRUCTEURS ===== 
+    public Voiture() {                                                          // Methode "Voiture" ne possedant aucune
+        this.numVoiture = ++compteur;                                           // variable locale
+        this.moteur = new Moteur();
+    }
+ 
+    public Voiture(int numMoteur) {                                             // Voiture(int numMoteur) = Methode "Voiture"
+        this.numVoiture = ++compteur;                                           // possédant une variable locale "numMoteur" 
+        this.moteur = new Moteur(numMoteur);                                    // de valeur "int"
+    }
+    
+    public Voiture(Vendeur vendeur) {
+        this.numVoiture = ++compteur;
+        this.moteur = new Moteur();
+        this.vendeur = vendeur;
+    }
+    
+    public Voiture(int numMoteur, Vendeur vendeur) {
+        this.numVoiture = ++compteur;
+        this.moteur = new Moteur(numMoteur);
+        this.vendeur = vendeur;
+    }
+// ===== REDEFINITION DE LA METHODE toString =====    
+    @Override
+    public String toString() {
+        if (vendeur == null) {
+            return  "\nVOITURE     : " + numVoiture +
+                    "\nMOTEUR      : " + moteur +
+                    "\nVENDEUR     : INCONNU";
+        } else {
+            return  "\nVOITURE     : " + numVoiture +
+                    "\nMOTEUR      : " + moteur +
+                    "\nVENDEUR     : " + vendeur;
+        }         
+    }
+}
+
+// ================================================================================================================= //
+// ============================ Class Vendeur
+public class Vendeur {
+    private String nom;                                                         // PROPRIETE / VARIABLE D'INSTANCE
+    private String prenom;                                                      // PROPRIETE / VARIABLE D'INSTANCE
+    private Garage garage;                                                      // PROPRIETE / VARIABLE D'INSTANCE
+
+// ===== CONSTRUCTEURS ===== 
+    public Vendeur(String prenom, String nom , Garage garage) {                  // Vendeur(String nom, String prenom, Garage garage)
+        this.prenom = prenom; 
+        this.nom = nom;                                                         // Methode "Vendeur" possedant deux variables LOCALES                                                  // de type String : "nom" et "prenom" +
+        this.garage = garage;                                                   // une variable LOCALE de type Garage : "garage"
+    }
+    public String getVendeurNom() {
+        return nom;
+    }
+// ===== REDEFINITION DE LA METHODE toString =====    
+    @Override
+    public String toString() {
+        return "\n" + nom + " " + prenom + "\n" + garage ;
+    }
+}
+
+// ================================================================================================================= //
+// ============================ Class Moteur
+public class Moteur {
+
+    private int numMoteur;                                                      // PROPRIETE / VARIABLE D'INSTANCE
+    
+    private static int compteurMoteur = 1000;                                   // PROPRIETE / VARIABLE DE CLASSE
+ 
+// ===== CONSTRUCTEURS ===== 
+    public Moteur() {
+        this.numMoteur = ++compteurMoteur;
+    }
+    
+    public Moteur(int numMoteur) {
+        this.numMoteur = numMoteur;
+    }  
+// ===== REDEFINITION DE LA METHODE toString =====    
+    @Override
+    public String toString() {
+        return  "NMOT" + numMoteur;
+    }
+}

@@ -1,6 +1,9 @@
-// ================================================================================================================= //
-// ==================================         Auteur du TP Michel GINESTE         ================================== //
-// ================================================================================================================= //
+// ==================================================================================================================== //
+// ==================================         Auteur du TP Michel GINESTE         ===================================== //
+// Utiliser un tableau de 3 vendeurs initialisé dans la méthode main                                                    //
+// Utliser un tableau de voitures initialisé de manière conversationnelle en entrant au clavier le nombre de voitures   //
+// à créer, puis pour chaque voiture, le numéro du moteur (ou 0 pour une affectation automatique), et le NOM du vendeur //
+// ==================================================================================================================== //
 
 package tableauvoitures;
 import utilitairesMG.divers.Clavier;

@@ -1,0 +1,120 @@
+// ==================================================================================================================== //
+// ==================================         Auteur du TP Michel GINESTE         ===================================== //
+// 1. Créer une classe Animal.
+// Propriétés:  un boolean vivant (vrai si l'animal est vivant, sinon faux)
+//              un integer age (age de l'animal)
+//              un integer nombreAnimauxVivants
+//              un integer ageMaximum
+// Méthodes:    Constructeur d'initialisation (Animal(int age)).
+//              vieillir(): fait vieillir l'animal d'un an
+//              mourir(): fait mourir l'animal
+//              crier(): fait crier l'animal "Je suis un animal !"
+// 2. Créer une classe Vache héritant de Animal.
+// Une Vache crie "Meuh !" et elle possède une propriété ageMaximum.
+// ==================================================================================================================== //
+package animal;
+
+public class TestAnimal {
+    public static void main(String argv[]) {
+        Animal tableAnimal[] = new Animal[2];
+        int iAnimal;
+        
+        tableAnimal[0] = new Vache(1);
+        tableAnimal[1] = new Animal(2);
+        
+        while (Animal.getNombreAnimauxVivants() > 0) {
+            for (iAnimal = 0; iAnimal < 2; iAnimal++) {
+                if (tableAnimal[iAnimal].getVivant()) {
+                    tableAnimal[iAnimal].crier();
+                    tableAnimal[iAnimal].vieillir();
+                }
+            }
+        }
+    }
+}
+
+// ==================================================================================================================== //
+// =============================================== Classe Animal
+public class Animal {
+
+    private boolean vivant = true;
+    private int age;
+    static int nombreAnimauxVivants;
+    private static int ageMaximum = 3;
+        
+    public Animal(int age) {
+        this.age = age;
+        nombreAnimauxVivants++;
+    }
+
+    public void vieillir() {
+        age++;
+        if (age <= getAgeMax()) {
+            affiche();
+        } else {
+            mourir();
+        }
+    }
+    
+    public void mourir() {
+        vivant = false;
+        afficheMort();
+        nombreAnimauxVivants--;
+        }
+    
+    public void crier() {
+        System.out.println("Je suis un animal !");
+    }
+
+    public boolean getVivant() {
+        return vivant;
+    }
+    
+    public static int getNombreAnimauxVivants() {
+        return nombreAnimauxVivants;
+    }
+
+    public int getAge() {
+        return age;
+    }
+    
+    public int getAgeMax() {
+        return ageMaximum;
+    }
+
+    public void affiche() {
+        System.out.println("Cet animal a maintenant " + age + " ans");
+    }
+    
+    public void afficheMort() {
+        System.out.println("Un animal vient de mourir !");
+    }
+}
+
+// ==================================================================================================================== //
+// =============================================== Classe Vache
+package animal;
+
+public class Vache extends Animal {
+    private static int ageMaximum = 5;
+
+    public Vache(int age) {
+        super(age);
+    }
+
+    public void crier() {
+        System.out.println("MEUH !");
+    }
+    
+    public int getAgeMax() {
+        return ageMaximum;
+    }
+    
+    public void affiche() {
+        System.out.println("Cette vache a maintenant " + getAge() + " ans");
+    }
+
+    public void afficheMort() {
+        System.out.println("Une vache vient de mourir !");  
+    }
+}

@@ -1,0 +1,138 @@
+// ==================================================================================================================== //
+// ==================================         Auteur du TP Michel GINESTE         ===================================== //
+// Trier des objets représentant des figures géométriques (cercles, rectangles, triangles) par ordre de surface
+// croissante, en utilisant sans modification la classe TriBulleTableau
+// ==================================================================================================================== //
+package surfacecomparable;
+
+public class SurfaceComparable {
+
+    public static void main(String[] args) {
+        Figure tabFigures[] = {
+            new Triangle(6,2),
+            new Cercle(4),
+            new Rectangle(7,9),
+            new Triangle(6,17),
+            new Cercle(3),
+            new Triangle(6,7),
+            new Rectangle(3,14)
+        };
+        
+        System.out.println("Figure a trier :\n");
+        TriBulleTableau.afficher(tabFigures);
+        TriBulleTableau.trier(tabFigures);
+        System.out.println("\n\nFigures triees :\n");
+        TriBulleTableau.afficher(tabFigures); 
+    } 
+}
+
+// ==================================================================================================================== //
+// ======================================== TriBulleTableau
+public class TriBulleTableau {
+
+    public static void trier(Comparable tableau[]) {
+        boolean permut;
+        int n;
+        Comparable x;
+        
+        do {
+            permut = false;
+            for (n = 0; n < tableau.length -1; n++) {
+                if (tableau[n].compareTo(tableau[n+1]) > 0) {
+                    x = tableau[n];
+                    tableau[n] = tableau[n+1];
+                    tableau[n+1] = x;
+                    permut = true;
+                }
+            }
+        } while (permut == true);
+    }    
+    
+    public static void afficher(Comparable tableau[]) {
+        int n;
+        
+        for (n = 0; n < tableau.length; n++) {
+            System.out.println(tableau[n]);
+        }
+    }
+}
+
+// ==================================================================================================================== //
+// ======================================== Classe Figure
+public abstract class Figure implements Comparable<Figure> {                    // Une classe abstract ne peut pas etre instanciée.
+                                                                                // Dans cet exemple, on ne peut pas faire "new Figure()";
+    public abstract double surface();                                           // Si une classe possède une méthode abstract, la class est 
+                                                                                // OBLIGATOIREMENT abstract.
+    @Override
+    public int compareTo(Figure o) {                                            // En implementant 'Comparable' on est obligé de redéfinir les 
+       if(this.surface() < o.surface())                                         // méthodes de Comparable --> 'public int compareTo() {'
+            return -1;                                                          // L'interface Comparable ne possède qu'une seule méthode:
+       if(this.surface() > o.surface())                                         // 'public int compareTo(Object o) {'
+            return 1;
+       return 0;
+    }
+}
+
+// ==================================================================================================================== //
+// ======================================== Classe Cercle
+public class Cercle extends Figure {
+    private int a;
+    
+    public Cercle(int a) {
+        this.a = a;
+    }
+
+    @Override
+    public double surface() {
+       return (a*a*Math.PI);
+    }
+    
+    @Override
+    public String toString() {
+        return "Cercle de rayon " + a + ", Surface : " + surface();
+    }
+}
+
+// ==================================================================================================================== //
+// ======================================== Classe Rectangle
+public class Rectangle extends Figure {
+    private int a, b;
+    
+    public Rectangle (int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
+
+    @Override
+    public double surface() {
+        return ((float) a* (float) b);
+    }
+    
+    @Override
+    public String toString() {
+        return "Rectangle de largeur " + a 
+                + ", de hauteur " + b + ", Surface : " + surface();
+    }
+    
+    // ==================================================================================================================== //
+// ======================================== Classe Triangle
+public class Triangle extends Figure {
+    private int a, b;
+    
+    public Triangle(int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
+
+    @Override
+    public double surface() {
+        return (a*b /2.f);
+    }
+
+    @Override
+    public String toString() {
+        return "Triangle de base " + a + ", de hauteur "
+               + b + ", Surface : " + surface();
+    }
+}
+}

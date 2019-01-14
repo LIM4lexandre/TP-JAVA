@@ -1,0 +1,76 @@
+// ==================================================================================================================== //
+// ==================================         Auteur du TP Michel GINESTE         ===================================== //
+// Développer une classe DateFr qui permet à un utilisateur de gérer des variables de manipulation de dates             //
+// ==================================================================================================================== //
+package testdatefr;
+import java.util.*;
+import java.text.*;
+import utilitairesMG.divers.Clavier;
+
+public class TestDateFr {
+
+    public static void main(String[] args) throws ParseException {
+       DateFr date1, date2;
+       String saisieDate;
+       
+       date1 = new DateFr();
+       date2 = new DateFr("03/09/2017");
+       System.out.println("date 1: " + date1 + "        date 2: " + date2);
+       
+       date1.set("31/01/2017");
+       System.out.println("\ndate 1 apres set: " + date1);
+       
+       date1.add(Calendar.MONTH, 3);
+       System.out.println("\ndate 1 apres add: " + date1);
+       
+       date1.setFormat("EEEE dd MMMM yyyy");
+       System.out.println("\ndate 1 apres setFormat: " + date1);
+       
+       date1.setFormat("dd MMMM yyyy");
+       System.out.println("\nSaisir une date (" + date1.toFormat() + "): ");
+       saisieDate = Clavier.readString();
+       date1.set(saisieDate);
+       System.out.println("date 1 apres set: " + date1);
+       
+       System.out.println("\ndate1: " + date1 + "        date2: " + date2);
+       System.out.println("Difference: " + DateFr.difDates(date1, date2)
+                            + " jour(s)");
+    }
+}
+
+// ==================================================================================================================== //
+// ======================================= Classe DateFr
+public class DateFr extends GregorianCalendar {
+
+    private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+    
+    public DateFr() {
+    }
+
+    public DateFr(String s) throws ParseException {
+        setTime(formatDate.parse(s));
+    }
+
+    public void set(String s) throws ParseException {
+        setTime(formatDate.parse(s));
+    }
+    
+    public void setFormat(String s) {
+        formatDate.applyPattern(s); 
+    }
+   
+    public String toFormat() {
+        return formatDate.toPattern();
+    }
+    
+    public static double difDates(DateFr d1, DateFr d2) {
+        long difference = d2.getTimeInMillis() - d1.getTimeInMillis();
+        difference = (difference) / (1000*3600*24);
+        return difference;
+    }
+
+    @Override
+    public String toString() {
+        return formatDate.format(getTime());
+    }
+}

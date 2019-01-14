@@ -1,0 +1,181 @@
+// ==================================================================================================================== //
+// ==================================         Auteur du TP Michel GINESTE         ===================================== //
+// Utiliser un vecteur de 3 vendeurs, initialisé dans la méthode main().
+// Utiliser un vecteur de voitures initialisé de manière conversationnelle en entrant au clavier le nombre de voitures
+// à créer, puis pour chaque voiture, le numéro de moteur (ou 0 pour une affectation automatique), et le NOM du vendeur
+// ==================================================================================================================== //
+package voiturevecteurs;
+import java.util.*;
+import utilitairesMG.divers.Clavier;
+
+public class VoitureVecteurs {
+
+    public static void main(String[] args) {
+        int nbVoiture, numMoteur, i, j;
+        String nomV;
+        Garage g1, g2;
+
+        g1 = new Garage("Avenue des champes Elysee 75008 PARIS");
+        g2 = new Garage();
+        
+// ===== VECTEUR DE VENDEURS =====
+        Vector<Vendeur> vVendeur = new Vector<Vendeur>();
+        vVendeur.add(new Vendeur("Oie", "BERNACHE", g1));
+        vVendeur.add(new Vendeur("Aigle","ROYAL", g2));
+        vVendeur.add(new Vendeur("Balbuzard", "PECHEUR", g1));
+        
+// ===== VECTEUR DE VOITURES EN CONVERSATIONNEL =====        
+        System.out.print("Entrez le nombre de voiture a creer : ");
+        nbVoiture = Clavier.readInt();                                          // Saisie du nombre de lignes
+        ArrayList<Voiture> aLVoiture = new ArrayList<Voiture>();
+        for (i = 0; i < nbVoiture; i++) {                               
+            System.out.println("\nVoiture numero " + (i+1) + " :");
+            System.out.println("Numero de moteur (ou 0) :");
+            numMoteur = Clavier.readInt();
+            System.out.println("Nom du vendeur : ");
+            nomV = Clavier.readString();
+            
+            j = 0;
+            while ((j < vVendeur.size()) && (vVendeur.get(j).getVendeurNom().
+                    compareToIgnoreCase(nomV) != 0)) { 
+                j++;
+            }
+            if (j >= vVendeur.size()) {
+                if (numMoteur == 0) {
+                    aLVoiture.add(new Voiture());
+                } else {
+                    aLVoiture.add(new Voiture(numMoteur));
+                }
+            } else {                                                            
+                if (numMoteur == 0) {
+                    aLVoiture.add(new Voiture(vVendeur.get(j)));
+                } else {
+                    aLVoiture.add(new Voiture(numMoteur, vVendeur.get(j)));
+                }
+            }   
+        }
+// ===== AFFICHAGE RESULTAT =====        
+        for (i = 0; i < nbVoiture; i++) {
+        System.out.print(aLVoiture.get(i) + "\n");
+        }
+    }
+}
+
+// ==================================================================================================================== //
+// ========================================= Classe Garage
+public class Garage {
+    private static String nomMarque = "VOLIERE SA";                             // PROPRIETE / VARIABLE DE CLASSE
+    
+    private String adresse;                                                     // PROPRIETE / VARIABLE D'INSTANCE
+
+// ===== CONSTRUCTEURS ===== 
+    public Garage() {
+        this.adresse = "Rue Paradis 13001 MARSELLE";
+    }
+            
+    public Garage(String adresse) {                                             // Garage(String adresse) = Methode "Garage"
+        this.adresse = adresse;                                                 // possedant une variable LOCALE "adresse"
+    }                                                                           // de valeur "String"
+// ===== METHODES GETTER / SETTER ======    
+    public static String getNomMarque() {
+        return nomMarque;
+    }
+// ===== REDEFINITION DE LA METHODE toString =====    
+    @Override
+    public String toString() {
+        return  nomMarque + " - " + adresse;
+    }
+}
+
+// ==================================================================================================================== //
+// ========================================= Classe Vendeur
+public class Vendeur {
+    private String nom;                                                         // PROPRIETE / VARIABLE D'INSTANCE
+    private String prenom;                                                      // PROPRIETE / VARIABLE D'INSTANCE
+    private Garage garage;                                                      // PROPRIETE / VARIABLE D'INSTANCE
+
+// ===== CONSTRUCTEURS ===== 
+    public Vendeur(String prenom, String nom, Garage garage) {                  // Vendeur(String nom, String prenom, Garage garage)
+        this.prenom = prenom;                                                         // Methode "Vendeur" possedant deux variables LOCALES
+        this.nom = nom;                                                   // de type String : "nom" et "prenom" +
+        this.garage = garage;                                                   // une variable LOCALE de type Garage : "garage"
+    }
+    
+    public String getVendeurNom() {
+        return nom;
+    }
+    
+// ===== REDEFINITION DE LA METHODE toString =====    
+    @Override
+    public String toString() {
+        return "\n" + prenom + " " + nom + "\n" + garage ;
+    }
+}
+
+// ==================================================================================================================== //
+// ========================================= Classe Moteur
+public class Moteur {
+    private int numMoteur;                                                      // PROPRIETE / VARIABLE D'INSTANCE
+    
+    private static int compteurMoteur = 1000;                                   // PROPRIETE / VARIABLE DE CLASSE
+ 
+// ===== CONSTRUCTEURS ===== 
+    public Moteur() {
+        this.numMoteur = ++compteurMoteur;
+    }
+    
+    public Moteur(int numMoteur) {
+        this.numMoteur = numMoteur;
+    }
+// ===== REDEFINITION DE LA METHODE toString =====    
+    @Override
+    public String toString() {
+        return  "NMOT" + numMoteur;
+    }
+}
+
+// ==================================================================================================================== //
+// ========================================= Classe Voiture
+public class Voiture {
+    private int numVoiture;                                                     // PROPRIETE / VARIABLE D'INSTANCE
+    private Moteur moteur;                                                      // PROPRIETE / VARIABLE D'INSTANCE
+    private Vendeur vendeur;                                                    // PROPRIETE / VARIABLE D'INSTANCE
+    
+    private static int compteur;                                                // STATIC = PROPRIETE / VARIABLE DE CLASSE
+    
+// ===== CONSTRUCTEURS ===== 
+    public Voiture() {                                                          // Methode "Voiture" ne possedant aucune
+        this.numVoiture = ++compteur;                                           // variable locale
+        this.moteur = new Moteur();
+    }
+ 
+    public Voiture(int numMoteur) {                                             // Voiture(int numMoteur) = Methode "Voiture"
+        this.numVoiture = ++compteur;                                           // possédant une variable locale "numMoteur" 
+        this.moteur = new Moteur(numMoteur);                                    // de valeur "int"
+    }
+    
+    public Voiture(Vendeur vendeur) {
+        this.numVoiture = ++compteur;
+        this.moteur = new Moteur();
+        this.vendeur = vendeur;
+    }
+    
+    public Voiture(int numMoteur, Vendeur vendeur) {
+        this.numVoiture = ++compteur;
+        this.moteur = new Moteur(numMoteur);
+        this.vendeur = vendeur;
+    }
+// ===== REDEFINITION DE LA METHODE toString =====    
+    @Override
+    public String toString() {
+        if (vendeur == null) {
+            return  "\nVOITURE     : " + numVoiture +
+                    "\nMOTEUR      : " + moteur +
+                    "\nVENDEUR     : INCONNU";
+        } else {
+            return  "\nVOITURE     : " + numVoiture +
+                    "\nMOTEUR      : " + moteur +
+                    "\nVENDEUR     : " + vendeur;
+        }         
+    }
+}
